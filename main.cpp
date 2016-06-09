@@ -4,14 +4,14 @@
 #include <stack>
 
 enum e_Direction{e_UP=0, e_DOWN=1, e_LEFT=2, e_RIGHT=3};
-const int SZ = 9;
+const int SIZE_DATASTATE = 9;
 const int MAX_G = 4;
 
 
 
 
 struct State{
-	char DataState[SZ];
+	char DataState[SIZE_DATASTATE];
 	State *Generations[MAX_G];
 } NullState, SourceState, DestinationState;
 
@@ -31,6 +31,7 @@ std::stack<e_Direction>WayFromStartToFinish;
 
 void CalculteAllGenerations(State &ParentState);
 void WriteLog(const char *msg, const char* msg2 = NULL);
+void PrintDataState(const State &state);
 bool CheckCollisionOfState(const State &one, const State &two);
 
 using std::cout;
@@ -40,28 +41,33 @@ using std::cerr;
 
 int main(int argc, char **argv){
 	
-	memset(NullState.DataState, -1, SZ);
+	Debug.Set(true);
+
+	
+	WriteLog("Clear data", "NULL");
+	memset(NullState.DataState, -1, SIZE_DATASTATE);
 	for(int i = 0; i < MAX_G; i++)
 		NullState.Generations[i] = 0;
 
-	memset(SourceState.DataState, -1, SZ);
-	for(int i = 0; i < MAX_G; i++)
-		SourceState.Generations[i] = 0;
+	WriteLog("Get data", "SRC");
+	for(int i = 0; i < SIZE_DATASTATE; i++){
+		cin >> SourceState.DataState[i];
+	}//for
 		
-	memset(DestinationState.DataState, -1, SZ);
-	for(int i = 0; i < MAX_G; i++)
-		DestinationState.Generations[i] = 0;
+	WriteLog("Get data", "DST");
+	for(int i = 0; i < SIZE_DATASTATE; i++){
+		cin >> DestinationState.DataState[i];
+	}//for
 
-	Debug.Set(true);
+	WriteLog("Show data", "Null");
+	PrintDataState(NullState);
+	WriteLog("Show data", "SRC");
+	PrintDataState(SourceState);
+	WriteLog("Show data", "DST");
+	PrintDataState(DestinationState);
+
 	
-	WriteLog("Start programm!", "Test run.");
-	WriteLog("Write log 1");
-	WriteLog("Write log 2");
-	Debug.Set(false);
-	WriteLog("Write log 3");
-	Debug.Set(true);
-	WriteLog("Write log 4");
-	
+
 	return 0;
 }//end main()
 
@@ -100,9 +106,23 @@ void WriteLog(const char *msg, const char* msg2){
 	
 	TargetLog << msg;
 	if(msg2){
-			TargetLog << " : " << msg2;
+			TargetLog << " \t " << msg2;
 	}//if
 	TargetLog << endl;
 	TargetLog.flush();
 	
 }// end WriteLog()
+
+
+void PrintDataState(const State &state){
+	
+	for(int i = 0; i < SIZE_DATASTATE; i++){
+		cout << state.DataState[i];
+		if(i + 1 != SIZE_DATASTATE){
+				cout  << '-';
+		}		
+	}// for
+	cout << endl;
+	
+	
+}// end void PrintDataState();
